@@ -26,7 +26,10 @@ npm i
 
 3. Configure environment variables
 
-Create a file called `.env` in the root of the project, and specify your API key as well as the desired port to run the server
+Create a file called `.env` in the root of the project, and specify your:
+- API key (API_KEY)
+- Desired port (PORT)
+- MongoDB cluster connection string (CONNECTION_STRING)
 
 ```
 touch .env
@@ -34,6 +37,7 @@ touch .env
 ```
 --- [.env] ---
 API_KEY=<your_api_key>
+CONNECTION_STRING=mongodb+srv://<username>:<password>@clusterX.k4sdkm.mongodb.net/?retryWrites=true&w=majority&appName=ClusterX
 PORT=3001
 --------------
 ```
@@ -57,4 +61,7 @@ npm run dev
 
 ```
 Running on port 3001.
+Database connection established.
 ```
+
+If you do not see `Database connection established`, confirm that you have correctly put *your* mongo connection string into the .env file.

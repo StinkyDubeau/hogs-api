@@ -3,14 +3,36 @@ dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 const port = process.env.PORT || 3001;
 const app = express();
+const uri = process.env.CONNECTION_STRING;
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true
+  }
+});
 
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+async function run() {
+  try {
+    // Connect to mongo
+    await client.connect();
+    // Ping the mongo to confirm connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Database connection established.");
+  } finally {
+    await client.close();
+  }
+}
+run().catch(console.dir);
 
 // GET HOMEPAGE
 app.get("/", (req, res) => {
