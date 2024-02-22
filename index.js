@@ -4,58 +4,50 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
-/*
-Endpoints:
-  Web:
-    ...
-  API:
-    GET - Load Scores
-      Re
-*/
-
-
 
 // GET HOMEPAGE
 app.get("/", (req, res) => {
-  console.log("Loading \"/\"");
+  console.log("ENDPOINT: Getting homepage.");
   res.render("index.ejs");
 });
 
-app.get("/api/leaderboard", (req, res) => {
-  console.log("Loading a leaderboard.");
+// GET LEADERBOARD
+app.get("/api/score", (req, res) => {
+  console.log("ENDPOINT: Getting a leaderboard.");
   res.json(
     {
-      "status": "200",
-      "level": "c1_victoria",
-      "user_id": "user_id_of_player_making_request",
-      "sort_by": "points",
-      "columns": {
-        "0": "username",
-        "1": "points",
-        "2": "time",
-        "3": "game_version",
-        "4": "gamemode"
-      }
+      "status": "200"
     }
   )
 });
 
-app.post("/userLookup", async (req, res) => {
-  var response = req.body.username + "'s user ID is " + req.uuid;
-  console.log(response);
-  res.render("index.ejs", {
-    hypixel: translateJSON(req.hypixel)
-  });
-  //res.redirect("/");
+// POST USER
+app.post("/api/user", async (req, res) => {
+  console.log("ENDPOINT: Posting a user.");
+  res.json(
+    {
+      "status": "200"
+    }
+  )
+});
+
+// POST SCORE
+app.post("/api/score", (req, res) => {
+  console.log("ENDPOINT: Posting a score.");
+  res.json(
+    {
+      "status": "200"
+    }
+  )
 });
 
 app.listen(port, (req, res) => {
-  console.log(`Running on port: ${port}`);
+  console.log(`Running on port ${port}.`);
 });
