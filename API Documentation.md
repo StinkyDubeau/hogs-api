@@ -1,5 +1,5 @@
 # How to use hogs-api 
-## GET - Load Scores
+## Load a leaderboard with `get("/leaderboard")`
 ### Example request
 ```
     {
