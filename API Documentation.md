@@ -1,7 +1,14 @@
 # How to use hogs-api 
 The hogs-api is a REST api. An API_KEY header is expected in the header of your requests to get a response. Requests without an API key in header will be sent `401 Unauthorized`.
 
-## Load a leaderboard with `get("/leaderboard")`
+## Headers
+All requests to the hogs-api must have two things in their header:
+1. A self-identifier. E.g. `0.2.0` *(game version)*, or `web` *(for website requests)*.
+2. An API key that is kept ery-very secret.\*
+
+* API keys may be rolling in the future. This could deprecate old game builds.
+
+## Load a leaderboard with `get("/api/leaderboard")`.
 Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`. 
 ### Example request
 ```
@@ -27,7 +34,7 @@ Usage: Download a leaderboard with the columns that you include in your request.
     }
 ```
 
-## POST - Login as user
+## Verify, edit, or create a user with `post("api/user")`.
 Usage:
 To verify a user exists, to create a new user, or to update a user's friendly name.
 

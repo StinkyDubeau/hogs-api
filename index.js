@@ -11,10 +11,40 @@ app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+/*
+Endpoints:
+  Web:
+    ...
+  API:
+    GET - Load Scores
+      Re
+*/
+
+
+
 // GET HOMEPAGE
 app.get("/", (req, res) => {
   console.log("Loading \"/\"");
   res.render("index.ejs");
+});
+
+app.get("/api/leaderboard", (req, res) => {
+  console.log("Loading a leaderboard.");
+  res.json(
+    {
+      "status": "200",
+      "level": "c1_victoria",
+      "user_id": "user_id_of_player_making_request",
+      "sort_by": "points",
+      "columns": {
+        "0": "username",
+        "1": "points",
+        "2": "time",
+        "3": "game_version",
+        "4": "gamemode"
+      }
+    }
+  )
 });
 
 app.post("/userLookup", async (req, res) => {
