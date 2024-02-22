@@ -1,5 +1,8 @@
 # How to use hogs-api 
+The hogs-api is a REST api. An API_KEY header is expected in the header of your requests to get a response. Requests without an API key in header will be sent `401 Unauthorized`.
+
 ## Load a leaderboard with `get("/leaderboard")`
+Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`. 
 ### Example request
 ```
     {
@@ -51,7 +54,7 @@ Friendly name MUST be provided if new_user is "true". Otherwise, the server will
     }
 ```
 
-### Status codes with message 
+### Possible status codes
 * 200: User exists and friendly name is unchanged.
 * 201: New user was created with friendly name <friendly_name>.
 * 203: New user was created with automatically-generated friendly name <friendly_name>.
