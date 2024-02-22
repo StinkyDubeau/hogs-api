@@ -85,8 +85,10 @@ Usage: Submit a new score to the database when a level has been completed
     {
         "user_id": "john_highscore_getter",
         "level": "c1_victoria",
-        "points": "5020",
-        "gamemode": "story"
+        "time": 240000,
+        "points": 5020,
+        "gamemode": "story",
+        "game_version": "0.2.0"
     }
 ```
 
@@ -97,7 +99,7 @@ A `score_id` is automatically assigned to the score and returned in the repsonse
 ```
     {
         "status": "200",
-        "score_id": "12302",
+        "_id": "12302",
         "message": "Submitted a new score!"
     }
 ```
