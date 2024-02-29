@@ -129,7 +129,8 @@ app.get("/api/scores", async (req, res) => {
     const query = removeEmpty({
       user_id: req.body.user_id,
       level: req.body.level,
-      game_mode: req.body.game_mode
+      game_mode: req.body.game_mode,
+      game_version: req.body.game_version
     });
 
     response = await readMany(query, options, "scores", req.body.rows);
