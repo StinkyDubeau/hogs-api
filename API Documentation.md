@@ -20,7 +20,7 @@ API_KEY=d45e6-25er8-e7833-d9877-arm44
 * API keys may be rolling in the future.
 
 ## Load a leaderboard with `get("/api/scores")`.
-Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`.
+Usage: Download an array of scores filtered per your request. The resulting array will be in descending order sorted by points unless otherwise specified with key `sort_by`.
 
 ### Narrowers:
 
@@ -47,78 +47,32 @@ This will return *john_highscore_getter*'s top-10 scores on *c1_victoria*. Note 
 ```
 
 ### Example response
-The first column returned will be the `_id` for each row's score. The following columns respect your request.
+
+An array of score objects is returned.
 
 
 ```json
-{
-    "title": "Top scorers on c1_victoria",
-    "columns": {
-        "row": [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-        ],
-        "friendly_name": [
-            "alan",
-            "bob",
-            "chelsey",
-            "darrin",
-            "evelyn",
-            "frank",
-            "gord",
-            "helen",
-            "imran",
-            "joey"
-        ],
-        "points": [
-            9431,
-            9232,
-            8765,
-            7654,
-            6543,
-            5432,
-            4321,
-            3211,
-            2111,
-            1111
-        ],
-        "time": [
-            6543254,
-            5423675,
-            5286432,
-            4786755,
-            7845224,
-            5484248,
-            4854524,
-            4854528,
-            7827822,
-            7824554       
-        ],
-        "game_version": [
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0",
-            "0.2.0"
-        ],
-        "game_mode": [
-            "story",
-            "story",
-            "story",
-            "story",
-            "story",
-            "story",
-            "story",
-            "story",
-            "story",
-            "story"
-        ]
-    }
-}
+[
+    {
+        "_id": "65e0c6508154faf9951d265c",
+        "user_id": "user_id_2",
+        "level": "c1_victoria",
+        "time": 135552,
+        "points": 7456,
+        "game_mode": "story",
+        "game_version": "0.2.0"
+    },
+    {
+        "_id": "65e0c6548154faf9951d2664",
+        "user_id": "user_id_2",
+        "level": "c1_victoria",
+        "time": 117228,
+        "points": 8492,
+        "game_mode": "story",
+        "game_version": "0.2.0"
+    },
+...
+]
 ```
 
 ## Verify, edit, or create a user with `post("api/user")`.
@@ -174,7 +128,7 @@ Usage: Submit a new score to the database when a level has been completed
     "level": "c1_victoria",
     "time": 240000,
     "points": 5020,
-    "gamemode": "story",
+    "game_mode": "story",
     "game_version": "0.2.0"
 }
 ```

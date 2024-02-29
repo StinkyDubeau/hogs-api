@@ -50,21 +50,23 @@ async function authenticate(req, res, next) {
   }
 }
 
-async function readMany(query, options, collectionString) {
+async function readMany(query, options, collectionString, howManyRows) {
   let responses = [];
   const target = db.collection(collectionString);
 
   try {
     await client.connect();
 
-    if( await target.countDocuments(query) === 0) {
+    if (await target.countDocuments(query) === 0) {
       console.log(`WARN: No results matched your query`);
     }
 
     const response = await target.find(query);
 
     for await (const doc of response) {
-      //console.log(doc);
+      if (responses.length >= howManyRows) {
+        return responses;
+      }
       responses.push(doc);
     }
 
@@ -116,13 +118,8 @@ app.get("/api/scores", async (req, res) => {
   let response = [];
 
   try {
-
-
-
     const options = {
-      sort: {
-
-      },
+      sort: { points: 0 },
       projection: { // What columns
 
       }
@@ -131,16 +128,14 @@ app.get("/api/scores", async (req, res) => {
     // Insert narrowers into query
     const query = removeEmpty({
       user_id: req.body.user_id,
-      level: req.body.level
+      level: req.body.level,
+      game_mode: req.body.game_mode
     });
-    console.log("req body:");
-    console.log(req.body);
-    console.log(query);
 
-    response = await readMany(query, options, "scores");
+    response = await readMany(query, options, "scores", req.body.rows);
     console.log(response.length);
 
-    res.status(200).send({ "status": "200", "message": "Done" })
+    res.status(200).send(response)
   } catch {
     console.log("ERR: Failed to load leaderboard");
     res.status(500).send({ "status": "500", "message": "ERR: Failed to load leaderboard" })
