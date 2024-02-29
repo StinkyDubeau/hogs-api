@@ -173,8 +173,8 @@ app.post("/api/score", async (req, res) => {
   }
 });
 
-app.post("/api/scores", async (req, res, next) => {
-  console.log("ENDPOINT: Posting many scores. This may take a while.");
+app.post("/api/loadFakeScores", async (req, res, next) => {
+  console.log("ENDPOINT: Posting fake scores. This may take a while.");
 
   await postFakeScores();
   console.log("done!");
