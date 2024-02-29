@@ -5,7 +5,7 @@ This is the home of the hogs-api application. It will serve both the game Hogs a
 Go checkout `./API Documentation.md`.
 
 ## To install an instance of the server:
-*These steps should be compatible with AWS EC2 Virtual Machines*
+*These steps are compatible with AWS EC2 Virtual Machines*
 
 Prerequisites:
 - Nodejs (v16 or higher)

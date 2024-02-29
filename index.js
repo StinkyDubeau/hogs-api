@@ -4,6 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { MongoClient, ServerApiVersion } from "mongodb";
+import fakeScores from './helpers/fakeScores.js';
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -83,6 +84,12 @@ async function createOne(jsonData, collectionString) {
   }
 }
 
+async function postFakeScores(){
+  for (let i = 0; i < fakeScores.length; i++) {
+    await createOne(fakeScores[i], "scores");
+  }
+}
+
 // GET HOMEPAGE
 app.get("/", (req, res) => {
   console.log("ENDPOINT: Getting homepage.");
@@ -110,6 +117,17 @@ const fakeLeaderboardRequest = {
   },
   "rows": 10
 }
+
+const fakeScore = {
+  "user_id": "jaked",
+  "level": "c2_bridge",
+  "time": 696969,
+  "points": 2323,
+  "gamemode": "story",
+  "game_version": "0.2.0"
+}
+
+
 
 // GET LEADERBOARD
 app.get("/api/scores", async (req, res) => {
@@ -150,14 +168,7 @@ app.post("/api/user", async (req, res) => {
   })
 });
 
-const fakeScore = {
-  "user_id": "jaked",
-  "level": "c2_bridge",
-  "time": 696969,
-  "points": 2323,
-  "gamemode": "story",
-  "game_version": "0.2.0"
-}
+
 
 // POST SCORE
 app.post("/api/score", async (req, res) => {
@@ -179,6 +190,14 @@ app.post("/api/score", async (req, res) => {
       "message": "There was an error posting a score."
     })
   }
+});
+
+app.post("/api/scores", async (req, res, next) => {
+  console.log("ENDPOINT: Posting a score.");
+
+  await postFakeScores();
+  console.log("done!");
+  next();
 });
 
 app.listen(port, (req, res) => {
