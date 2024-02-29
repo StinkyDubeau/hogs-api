@@ -4,7 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { MongoClient, ServerApiVersion } from "mongodb";
-import {fakeScores, fakeScore, fakeLeaderboardRequest } from './helpers/fakeData.js';
+import { fakeScores, fakeScore, fakeLeaderboardRequest } from './helpers/fakeData.js';
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -20,7 +20,12 @@ const client = new MongoClient(uri, {
 });
 const db = client.db("hogs-api");
 
-// Middlewares
+// Helper functions
+function removeEmpty(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+}
+
+// Middleware
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -46,26 +51,28 @@ async function authenticate(req, res, next) {
 }
 
 async function readMany(query, options, collectionString) {
-  let response;
+  let responses = [];
   const target = db.collection(collectionString);
 
   try {
     await client.connect();
 
-    console.log(`Found ${await target.countDocuments(query)} matching results.`)
+    if( await target.countDocuments(query) === 0) {
+      console.log(`ERR: No results matched your query`);
+    }
 
-    response = await target.find({});
+    const response = await target.find(query);
 
-    if(await target.countDocuments({}) === 0){
-      
-      
+    for await (const doc of response) {
+      //console.log(doc);
+      responses.push(doc);
     }
 
   } catch {
     console.log(`ERR: Could not read (many) from "${collectionString}".`)
   } finally {
     await client.close();
-    return response;
+    return responses;
   }
 }
 
@@ -84,7 +91,7 @@ async function createOne(jsonData, collectionString) {
   }
 }
 
-async function postFakeScores(){
+async function postFakeScores() {
   for (let i = 0; i < fakeScores.length; i++) {
     await createOne(fakeScores[i], "scores");
   }
@@ -106,30 +113,38 @@ app.get("/admin", (req, res) => {
 app.get("/api/scores", async (req, res) => {
   console.log("ENDPOINT: Getting a leaderboard.");
 
-  let response;
+  let response = [];
 
-  const options = {
-    sort: {
+  try {
 
-    },
-    projection: { // What columns
 
-    }
-  };
 
-  // Insert narrowers into query
-  const query = {
-    user_id: "john_highscore_getter",
-    game_version: "0.2.0",
-    level: "c1_victoria"
+    const options = {
+      sort: {
+
+      },
+      projection: { // What columns
+
+      }
+    };
+
+    // Insert narrowers into query
+    const query = removeEmpty({
+      user_id: req.body.user_id,
+      level: req.body.level
+    });
+    console.log("req body:");
+    console.log(req.body);
+    console.log(query);
+
+    response = await readMany(query, options, "scores");
+    console.log(response.length);
+
+    res.status(200).send({ "status": "200", "message": "Done" })
+  } catch {
+    console.log("ERR: Failed to load leaderboard");
+    res.status(500).send({ "status": "500", "message": "ERR: Failed to load leaderboard" })
   }
-  console.log("req body:");
-  console.log(query);
-
-  response = await readMany(query, options, "scores");
-  //console.log(response);
-
-  res.status(500).send({ "message": "none" })
 });
 
 // POST USER
