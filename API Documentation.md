@@ -26,24 +26,19 @@ Usage: Download a leaderboard with the columns that you include in your request.
 
 Narrowers are special keys which filter resulting leaderboards. You should use at least one, or else you will get a raw list of all scores in the database.
 
-- `friendly_name` - When specified, the response will contain only that player's scores.
+- `user_id` - When specified, the response will contain only that player's scores.
 - `game_mode` - When specified, the response will only contain scores achieved in that game mode.
 - `level` - When specified, the response will only contain scores from that level.
+
+Hint: You can send `null` to any narrower and the server will ignore it entirely. This can make your client-side code easier to write, as you can use a generic object for all of your requests.
 
 ### Example request
 
 ```
 {
     "level": "c1_victoria",
-    "user_id": "user_id_of_player_making_request",
+    "user_id": "specific_user_id",
     "sort_by": "points",
-    "columns": {
-        "0": "friendly_name",
-        "1": "points",
-        "2": "time",
-        "3": "game_version",
-        "4": "game_mode"
-    },
     "rows": 10
 }
 ```

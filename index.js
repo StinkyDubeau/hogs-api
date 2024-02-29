@@ -40,10 +40,10 @@ async function authenticate(req, res, next) {
     return;
   }
   if (req.key === key) {
-    console.log("User authenticated")
+    // User authenticated
     next();
   } else {
-    console.log(`AUTHENTICATION: User denied access. User tried to use "${req.key}".`)
+    console.log(`AUTHENTICATION: User denied access. User tried to use key "${req.key}".`)
     res.status(401).send({
       "message": "Access denied. Check that API_KEY is in header and is up to date."
     })
@@ -58,7 +58,7 @@ async function readMany(query, options, collectionString) {
     await client.connect();
 
     if( await target.countDocuments(query) === 0) {
-      console.log(`ERR: No results matched your query`);
+      console.log(`WARN: No results matched your query`);
     }
 
     const response = await target.find(query);
