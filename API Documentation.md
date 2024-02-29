@@ -17,20 +17,23 @@ WHO_AM_I=web
 API_KEY=d45e6-25er8-e7833-d9877-arm44
 ```
 
-* API keys may be rolling in the future. This could deprecate old game builds.
+* API keys may be rolling in the future.
 
-## Load a leaderboard with `get("/api/score")`.
-Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`. 
+## Load a leaderboard with `get("/api/scores")`.
+Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`.
 
-#### Special cases:
+### Narrowers:
 
-`friendly_name` - When specified, the response will contain only that player's scores.
+Narrowers are special keys which filter resulting leaderboards. You should use at least one, or else you will get a raw list of all scores in the database.
+
+- `friendly_name` - When specified, the response will contain only that player's scores.
+- `game_mode` - When specified, the response will only contain scores achieved in that game mode.
+- `level` - When specified, the response will only contain scores from that level.
 
 ### Example request
 
 ```
 {
-    "status": "200",
     "level": "c1_victoria",
     "user_id": "user_id_of_player_making_request",
     "sort_by": "points",
@@ -46,11 +49,12 @@ Usage: Download a leaderboard with the columns that you include in your request.
 ```
 
 ### Example response
-The first column returned will be the row counter. The following columns will respect the request.
+The first column returned will be the `_id` for each row's score. The following columns respect your request.
 
 
 ```
 {
+    "title": "Top scorers on c1_victoria",
     "columns": {
         "row": [
             0, 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -104,7 +108,16 @@ The first column returned will be the row counter. The following columns will re
             "0.2.0"
         ],
         "game_mode": [
-
+            "story",
+            "story",
+            "story",
+            "story",
+            "story",
+            "story",
+            "story",
+            "story",
+            "story",
+            "story"
         ]
     }
 }
@@ -143,7 +156,7 @@ Friendly name MUST be provided if new_user is "true". Otherwise, the server will
     }
 ```
 
-### Possible status codes
+### Other responses
 
 * 200: User exists and friendly name is unchanged.
 * 201: New user was created with friendly name <friendly_name>.
@@ -170,7 +183,7 @@ Usage: Submit a new score to the database when a level has been completed
 
 ### Example response
 
-An `_id` is automatically assigned to the score and returned in the response. This allows a single user to have many scores for the same level without them overwriting eachother.
+An `_id` is automatically assigned to the score and returned in the response.
 
 ```
 {

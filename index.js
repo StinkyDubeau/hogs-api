@@ -22,6 +22,7 @@ const db = client.db("hogs-api");
 // Middlewares
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.use(authenticate);
 
@@ -43,7 +44,31 @@ async function authenticate(req, res, next) {
   }
 }
 
-async function insertOne(jsonData, collectionString) {
+async function readMany(query, options, collectionString) {
+  let response;
+  const target = db.collection(collectionString);
+
+  try {
+    await client.connect();
+
+    console.log(`Found ${await target.countDocuments(query)} matching results.`)
+
+    response = await target.find({});
+
+    if(await target.countDocuments({}) === 0){
+      
+      
+    }
+
+  } catch {
+    console.log(`ERR: Could not read (many) from "${collectionString}".`)
+  } finally {
+    await client.close();
+    return response;
+  }
+}
+
+async function createOne(jsonData, collectionString) {
   let response;
   const target = db.collection(collectionString);
 
@@ -51,7 +76,7 @@ async function insertOne(jsonData, collectionString) {
     await client.connect();
     response = await target.insertOne(jsonData);
   } catch {
-    console.log(`Could not insert into collection "${collectionString}".`)
+    console.log(`ERR: Could not create in collection "${collectionString}".`)
   } finally {
     await client.close();
     return response;
@@ -77,22 +102,43 @@ const fakeLeaderboardRequest = {
   "user_id": "user_id_of_player_making_request",
   "sort_by": "points",
   "columns": {
-    "0": "username",
+    "0": "friendly_name",
     "1": "points",
     "2": "time",
     "3": "game_version",
-    "4": "gamemode"
-  }
+    "4": "game_mode"
+  },
+  "rows": 10
 }
 
-
 // GET LEADERBOARD
-app.get("/api/score", (req, res) => {
+app.get("/api/scores", async (req, res) => {
   console.log("ENDPOINT: Getting a leaderboard.");
-  res.status(500).send({
-    "status": "500",
-    "message": "Not implemented yet."
-  })
+
+  let response;
+
+  const options = {
+    sort: {
+
+    },
+    projection: { // What columns
+
+    }
+  };
+
+  // Insert narrowers into query
+  const query = {
+    user_id: "john_highscore_getter",
+    game_version: "0.2.0",
+    level: "c1_victoria"
+  }
+  console.log("req body:");
+  console.log(query);
+
+  response = await readMany(query, options, "scores");
+  //console.log(response);
+
+  res.status(500).send({ "message": "none" })
 });
 
 // POST USER
@@ -119,7 +165,7 @@ app.post("/api/score", async (req, res) => {
 
   let response;
   try {
-    response = await insertOne(fakeScore, "scores");
+    response = await createOne(fakeScore, "scores");
 
     res.status(200).send({
       "status": "200",
