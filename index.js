@@ -26,16 +26,17 @@ app.set('view engine', 'ejs');
 app.use(authenticate);
 
 async function authenticate(req, res, next) {
-  if(!req.path.startsWith("/api/")){
+  req.key = req.header("API_KEY");
+  if (!req.path.startsWith("/api/")) {
     // Allow non-api traffic to access server
     next();
     return;
   }
-  if (req.header("API_KEY") === key) {
+  if (req.key === key) {
     console.log("User authenticated")
     next();
   } else {
-    console.log("User attempted to access with invalid API key")
+    console.log(`AUTHENTICATION: User denied access. User tried to use "${req.key}".`)
     res.status(401).send({
       "message": "Access denied. Check that API_KEY is in header and is up to date."
     })
@@ -68,6 +69,22 @@ app.get("/admin", (req, res) => {
   console.log("ENDPOINT: Getting admin page.");
   res.render("admin.ejs");
 });
+
+
+const fakeLeaderboardRequest = {
+  "status": "200",
+  "level": "c1_victoria",
+  "user_id": "user_id_of_player_making_request",
+  "sort_by": "points",
+  "columns": {
+    "0": "username",
+    "1": "points",
+    "2": "time",
+    "3": "game_version",
+    "4": "gamemode"
+  }
+}
+
 
 // GET LEADERBOARD
 app.get("/api/score", (req, res) => {

@@ -1,5 +1,5 @@
 # How to use hogs-api 
-The hogs-api is a REST api. An API_KEY header is expected in the header of your requests to get a response. Requests without an API key in header will be sent `401 Unauthorized`.
+The hogs-api is a REST api. An API_KEY is expected in the header of your requests to get a response from any endpoint that begins with `/api/`. Requests without an API key in header will be sent `401 Unauthorized`.
 
 Many endpoints expect a `user_id` field, as they are geared towards the Windows application. If you need to use one of these endpoints from the web, you can identify yourself as `anon` instead of providing a user_id. 
 
@@ -23,26 +23,42 @@ API_KEY=d45e6-25er8-e7833-d9877-arm44
 Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`. 
 ### Example request
 ```
-    {
-        "status": "200",
-        "level": "c1_victoria",
-        "user_id": "user_id_of_player_making_request",
-        "sort_by": "points",
-        "columns": {
-            "0": "username",
-            "1": "points",
-            "2": "time",
-            "3": "game_version",
-            "4": "gamemode"
-        }
+{
+    "status": "200",
+    "level": "c1_victoria",
+    "user_id": "user_id_of_player_making_request",
+    "sort_by": "points",
+    "columns": {
+        "0": "username",
+        "1": "points",
+        "2": "time",
+        "3": "game_version",
+        "4": "game_mode"
     }
+}
 ```
 
 ### Example response
 ```
-    {
+{
+    "columns": {
+        "username": [
 
+        ],
+        "points": [
+
+        ],
+        "time": [
+
+        ],
+        "game_version": [
+
+        ],
+        "game_mode": [
+
+        ],
     }
+}
 ```
 
 ## Verify, edit, or create a user with `post("api/user")`.
