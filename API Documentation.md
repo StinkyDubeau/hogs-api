@@ -21,7 +21,13 @@ API_KEY=d45e6-25er8-e7833-d9877-arm44
 
 ## Load a leaderboard with `get("/api/score")`.
 Usage: Download a leaderboard with the columns that you include in your request. The result will be in descending order sorted by points unless otherwise specified with key `sort_by`. 
+
+#### Special cases:
+
+`friendly_name` - When specified, the response will contain only that player's scores.
+
 ### Example request
+
 ```
 {
     "status": "200",
@@ -29,34 +35,77 @@ Usage: Download a leaderboard with the columns that you include in your request.
     "user_id": "user_id_of_player_making_request",
     "sort_by": "points",
     "columns": {
-        "0": "username",
+        "0": "friendly_name",
         "1": "points",
         "2": "time",
         "3": "game_version",
         "4": "game_mode"
-    }
+    },
+    "rows": 10
 }
 ```
 
 ### Example response
+The first column returned will be the row counter. The following columns will respect the request.
+
+
 ```
 {
     "columns": {
-        "username": [
-
+        "row": [
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        ],
+        "friendly_name": [
+            "alan",
+            "bob",
+            "chelsey",
+            "darrin",
+            "evelyn",
+            "frank",
+            "gord",
+            "helen",
+            "imran",
+            "joey"
         ],
         "points": [
-
+            9431,
+            9232,
+            8765,
+            7654,
+            6543,
+            5432,
+            4321,
+            3211,
+            2111,
+            1111
         ],
         "time": [
-
+            6543254,
+            5423675,
+            5286432,
+            4786755,
+            7845224,
+            5484248,
+            4854524,
+            4854528,
+            7827822,
+            7824554       
         ],
         "game_version": [
-
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0",
+            "0.2.0"
         ],
         "game_mode": [
 
-        ],
+        ]
     }
 }
 ```
