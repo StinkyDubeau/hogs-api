@@ -4,7 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { MongoClient, ServerApiVersion } from "mongodb";
-import fakeScores from './helpers/fakeScores.js';
+import {fakeScores, fakeScore, fakeLeaderboardRequest } from './helpers/fakeData.js';
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -102,33 +102,6 @@ app.get("/admin", (req, res) => {
   res.render("admin.ejs");
 });
 
-
-const fakeLeaderboardRequest = {
-  "status": "200",
-  "level": "c1_victoria",
-  "user_id": "user_id_of_player_making_request",
-  "sort_by": "points",
-  "columns": {
-    "0": "friendly_name",
-    "1": "points",
-    "2": "time",
-    "3": "game_version",
-    "4": "game_mode"
-  },
-  "rows": 10
-}
-
-const fakeScore = {
-  "user_id": "jaked",
-  "level": "c2_bridge",
-  "time": 696969,
-  "points": 2323,
-  "gamemode": "story",
-  "game_version": "0.2.0"
-}
-
-
-
 // GET LEADERBOARD
 app.get("/api/scores", async (req, res) => {
   console.log("ENDPOINT: Getting a leaderboard.");
@@ -168,8 +141,6 @@ app.post("/api/user", async (req, res) => {
   })
 });
 
-
-
 // POST SCORE
 app.post("/api/score", async (req, res) => {
   console.log("ENDPOINT: Posting a score.");
@@ -193,7 +164,7 @@ app.post("/api/score", async (req, res) => {
 });
 
 app.post("/api/scores", async (req, res, next) => {
-  console.log("ENDPOINT: Posting a score.");
+  console.log("ENDPOINT: Posting many scores. This may take a while.");
 
   await postFakeScores();
   console.log("done!");
