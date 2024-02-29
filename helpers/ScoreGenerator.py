@@ -20,13 +20,13 @@ def generate_points(used_points):
 # Generate the array of JSON objects
 data = []
 used_points = set()
-for _ in range(50):
+for _ in range(250):
     json_data = {
         "user_id": generate_user_id(),
-        "level": "c1_victoria",
+        "level": random.choice(["c1_victoria", "c3_wheatfield", "c1_doghouse"]),
         "time": generate_time(),
         "points": generate_points(used_points),
-        "gamemode": "story",
+        "game_mode": random.choice(["story", "story_cheats", "sandbox"]),
         "game_version": "0.2.0"
     }
     data.append(json_data)
