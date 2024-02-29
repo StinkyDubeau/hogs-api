@@ -8,6 +8,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 const port = process.env.PORT || 3001;
 const app = express();
 const uri = process.env.CONNECTION_STRING;
+const key = process.env.API_KEY;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -18,32 +19,50 @@ const client = new MongoClient(uri, {
 });
 const db = client.db("hogs-api");
 
+// Middlewares
 app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+app.use(authenticate);
 
-async function run() {
-  try {
-    // Connect to mongo
-    await client.connect();
-    // Ping the mongo to confirm connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Database connection established.");
-  } finally {
-    await client.close();
-    //console.log("Database connection closed.");
+async function authenticate(req, res, next) {
+  if (req.header("API_KEY") === key) {
+    console.log("User authenticated")
+    next();
+  } else {
+    console.log("User attempted to access with invalid API key")
+    res.status(401).send({
+      "message": "Access denied. Check that API_KEY is in header and is up to date."
+    })
   }
 }
-run().catch(console.dir);
 
-async function insertIntoDatabase(data) {
+// async function run() {
+//   try {
+//     // Connect to mongo
+//     await client.connect();
+//     // Ping mongo to confirm connection
+//     await client.db("admin").command({ ping: 1 });
+//     console.log("Database connection established.");
+//   } finally {
+//     await client.close();
+//     //console.log("Database connection closed.");
+//   }
+// }
+// run().catch(console.dir);
+
+async function insertIntoDatabase(jsonData, collectionString) {
+  let response;
+  const target = db.collection(collectionString);
+
   try {
     await client.connect();
-
-    await db.collection("scores").insertOne(data);
-
+    response = await target.insertOne(jsonData);
+  } catch {
+    console.log(`Could not insert into collection "${collectionString}".`)
   } finally {
     await client.close();
+    return response;
   }
 }
 
@@ -79,25 +98,37 @@ app.post("/api/user", async (req, res) => {
   )
 });
 
+const fakeScore = {
+  "user_id": "john_highscore_teser",
+  "level": "c1_victoria",
+  "time": 440000,
+  "points": 5020,
+  "gamemode": "story",
+  "game_version": "0.2.0"
+}
+
 // POST SCORE
 app.post("/api/score", async (req, res) => {
   console.log("ENDPOINT: Posting a score.");
-  await insertIntoDatabase(
-    {
-      "user_id": 12345678901234567,
-      "level": "c1_victoria",
-      "time": 240000,
-      "points": 5020,
-      "gamemode": "story",
-      "game_version": "0.2.0"
-    }
-  );
-  console.log("Done inserting into database");
-  res.json(
-    {
-      "status": "200"
-    }
-  )
+
+  let response;
+  try {
+    response = await insertIntoDatabase(fakeScore, "scores");
+
+    console.log("Done inserting into database");
+    console.log(response);
+
+    res.status(200).send({
+      "status": "200",
+      "message": "Submitted a new score."
+    })
+  } catch {
+    console.log("There was an error posting a score.");
+    res.status(500).send({
+      "status": "500",
+      "message": "There was an error posting a score."
+    })
+  }
 });
 
 app.listen(port, (req, res) => {

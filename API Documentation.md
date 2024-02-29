@@ -3,8 +3,17 @@ The hogs-api is a REST api. An API_KEY header is expected in the header of your 
 
 ## Headers
 All requests to the hogs-api must have two things in their header:
-1. A self-identifier. E.g. `0.2.0` *(game version)*, or `web` *(for website requests)*.
+
+1. A self-identifier, `WHO_AM_I`, e.g. `0.2.0` *(game version)*, or `web` *(for website requests)*.
+
 2. An API key that is kept ery-very secret.\*
+
+For example:
+
+```
+WHO_AM_I=web
+API_KEY=d45e6-25er8-e7833-d9877-arm44
+```
 
 * API keys may be rolling in the future. This could deprecate old game builds.
 
@@ -94,12 +103,12 @@ Usage: Submit a new score to the database when a level has been completed
 
 ### Example response
 
-A `score_id` is automatically assigned to the score and returned in the repsonse. This allows a single user to have many scores for the same level without them overwriting eachother.
+An `_id` is automatically assigned to the score and returned in the response. This allows a single user to have many scores for the same level without them overwriting eachother.
 
 ```
     {
         "status": "200",
         "_id": "12302",
-        "message": "Submitted a new score!"
+        "message": "Submitted a new score."
     }
 ```
