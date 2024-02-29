@@ -12,7 +12,7 @@ All requests to the hogs-api must have two things in their header:
 
 For example:
 
-```
+```conf
 WHO_AM_I=web
 API_KEY=d45e6-25er8-e7833-d9877-arm44
 ```
@@ -34,10 +34,13 @@ Hint: You can send `null` to any narrower and the server will ignore it entirely
 
 ### Example request
 
-```
+This will return *john_highscore_getter*'s top-10 scores on *c1_victoria*. Note that we are using `user_id`, and not `friendly_name`.
+
+```json
 {
     "level": "c1_victoria",
-    "user_id": "specific_user_id",
+    "user_id": "john_highscore_getter",
+    "game_mode": null,
     "sort_by": "points",
     "rows": 10
 }
@@ -47,7 +50,7 @@ Hint: You can send `null` to any narrower and the server will ignore it entirely
 The first column returned will be the `_id` for each row's score. The following columns respect your request.
 
 
-```
+```json
 {
     "title": "Top scorers on c1_victoria",
     "columns": {
@@ -134,7 +137,7 @@ Friendly name MUST be provided if new_user is "true". Otherwise, the server will
 
 ### Example request 
 
-```
+```json
     {
         "user_id": "user_id_of_player_making_request",
         "new_user": "false",
@@ -144,7 +147,7 @@ Friendly name MUST be provided if new_user is "true". Otherwise, the server will
 
 ### Example response
 
-```
+```json
     {
         "status": "200",
         "message": "User exists and friendly name is unchanged."
@@ -165,7 +168,7 @@ Usage: Submit a new score to the database when a level has been completed
 
 ### Example request 
 
-```
+```json
 {
     "user_id": "user_id_of_score_getter",
     "level": "c1_victoria",
@@ -180,7 +183,7 @@ Usage: Submit a new score to the database when a level has been completed
 
 An `_id` is automatically assigned to the score and returned in the response.
 
-```
+```json
 {
     "status": "200",
     "_id": "65e0980c111551dc08eb258c",
