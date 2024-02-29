@@ -37,21 +37,7 @@ async function authenticate(req, res, next) {
   }
 }
 
-// async function run() {
-//   try {
-//     // Connect to mongo
-//     await client.connect();
-//     // Ping mongo to confirm connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Database connection established.");
-//   } finally {
-//     await client.close();
-//     //console.log("Database connection closed.");
-//   }
-// }
-// run().catch(console.dir);
-
-async function insertIntoDatabase(jsonData, collectionString) {
+async function insertOne(jsonData, collectionString) {
   let response;
   const target = db.collection(collectionString);
 
@@ -99,10 +85,10 @@ app.post("/api/user", async (req, res) => {
 });
 
 const fakeScore = {
-  "user_id": "john_highscore_teser",
-  "level": "c1_victoria",
-  "time": 440000,
-  "points": 5020,
+  "user_id": "jaked",
+  "level": "c2_bridge",
+  "time": 696969,
+  "points": 2323,
   "gamemode": "story",
   "game_version": "0.2.0"
 }
@@ -113,13 +99,11 @@ app.post("/api/score", async (req, res) => {
 
   let response;
   try {
-    response = await insertIntoDatabase(fakeScore, "scores");
-
-    console.log("Done inserting into database");
-    console.log(response);
+    response = await insertOne(fakeScore, "scores");
 
     res.status(200).send({
       "status": "200",
+      "_id": response.insertedId,
       "message": "Submitted a new score."
     })
   } catch {

@@ -1,6 +1,8 @@
 # How to use hogs-api 
 The hogs-api is a REST api. An API_KEY header is expected in the header of your requests to get a response. Requests without an API key in header will be sent `401 Unauthorized`.
 
+Many endpoints expect a `user_id` field, as they are geared towards the Windows application. If you need to use one of these endpoints from the web, you can identify yourself as `anon` instead of providing a user_id. 
+
 ## Headers
 All requests to the hogs-api must have two things in their header:
 
@@ -91,14 +93,14 @@ Usage: Submit a new score to the database when a level has been completed
 ### Example request 
 
 ```
-    {
-        "user_id": "john_highscore_getter",
-        "level": "c1_victoria",
-        "time": 240000,
-        "points": 5020,
-        "gamemode": "story",
-        "game_version": "0.2.0"
-    }
+{
+    "user_id": "user_id_of_score_getter",
+    "level": "c1_victoria",
+    "time": 240000,
+    "points": 5020,
+    "gamemode": "story",
+    "game_version": "0.2.0"
+}
 ```
 
 ### Example response
@@ -106,9 +108,9 @@ Usage: Submit a new score to the database when a level has been completed
 An `_id` is automatically assigned to the score and returned in the response. This allows a single user to have many scores for the same level without them overwriting eachother.
 
 ```
-    {
-        "status": "200",
-        "_id": "12302",
-        "message": "Submitted a new score."
-    }
+{
+    "status": "200",
+    "_id": "65e0980c111551dc08eb258c",
+    "message": "Submitted a new score."
+}
 ```
