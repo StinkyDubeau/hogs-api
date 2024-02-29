@@ -26,6 +26,11 @@ app.set('view engine', 'ejs');
 app.use(authenticate);
 
 async function authenticate(req, res, next) {
+  if(!req.path.startsWith("/api/")){
+    // Allow non-api traffic to access server
+    next();
+    return;
+  }
   if (req.header("API_KEY") === key) {
     console.log("User authenticated")
     next();
@@ -58,7 +63,7 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
-// GET HOMEPAGE
+// GET ADMIN PAGE
 app.get("/admin", (req, res) => {
   console.log("ENDPOINT: Getting admin page.");
   res.render("admin.ejs");
@@ -67,21 +72,19 @@ app.get("/admin", (req, res) => {
 // GET LEADERBOARD
 app.get("/api/score", (req, res) => {
   console.log("ENDPOINT: Getting a leaderboard.");
-  res.json(
-    {
-      "status": "200"
-    }
-  )
+  res.status(500).send({
+    "status": "500",
+    "message": "Not implemented yet."
+  })
 });
 
 // POST USER
 app.post("/api/user", async (req, res) => {
   console.log("ENDPOINT: Posting a user.");
-  res.json(
-    {
-      "status": "200"
-    }
-  )
+  res.status(500).send({
+    "status": "500",
+    "message": "Not implemented yet."
+  })
 });
 
 const fakeScore = {
