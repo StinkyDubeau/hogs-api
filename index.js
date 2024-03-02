@@ -99,6 +99,14 @@ async function postFakeScores() {
   }
 }
 
+// GET TEST JSON (No authentication, used for testing front-end)
+app.get("/topPlayer", (req, res) => {
+  res.status(200).send({
+    "status": "200",
+    "message": "test success",
+  });
+});
+
 // GET HOMEPAGE
 app.get("/", (req, res) => {
   console.log("ENDPOINT: Getting homepage.");
