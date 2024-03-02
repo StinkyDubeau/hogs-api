@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
+import cors from "cors";
 import bodyParser from "body-parser";
 import axios from "axios";
 import { MongoClient, ServerApiVersion } from "mongodb";
@@ -27,6 +28,7 @@ function removeEmpty(obj) {
 
 // Middleware
 app.use(express.static("./public"));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
