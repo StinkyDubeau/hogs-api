@@ -101,6 +101,15 @@ async function postFakeScores() {
   }
 }
 
+// GET TEST JSON (No authentication, used for testing front-end)
+app.get("/test", (req, res) => {
+  res.status(200).send({
+    "status": 200,
+    "message": "test success",
+    "time": new Date().getMinutes()
+  });
+});
+
 // GET HOMEPAGE
 app.get("/", (req, res) => {
   console.log("ENDPOINT: Getting homepage.");
