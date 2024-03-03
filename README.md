@@ -8,7 +8,7 @@ Go checkout `./API Documentation.md`.
 *These steps are compatible with AWS EC2 Virtual Machines*
 
 Prerequisites:
-- Nodejs (v16 or higher)
+- Nodejs 20.11
 - An open port (of your choice, but our interal applications will prefer port 3001).
 
 1. Navigate to a desired directory and clone:
