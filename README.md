@@ -50,10 +50,9 @@ For deployment:
 npm start
 ```
 
-For development (server will restart when changes made to the code):
+For development (server will restart when changes made to the code. requires nodemon `sudo npm i -g nodemon`):
 
 ```
-npm i nodemon
 npm run dev
 ```
 
