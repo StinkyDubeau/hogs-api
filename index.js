@@ -3,7 +3,6 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import axios from "axios";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { fakeScores, fakeScore, fakeLeaderboardRequest } from './helpers/fakeData.js';
 
