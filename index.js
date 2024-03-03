@@ -102,10 +102,11 @@ async function postFakeScores() {
 }
 
 // GET TEST JSON (No authentication, used for testing front-end)
-app.get("/topPlayer", (req, res) => {
+app.get("/test", (req, res) => {
   res.status(200).send({
-    "status": "200",
+    "status": 200,
     "message": "test success",
+    "time": new Date().getMinutes()
   });
 });
 
