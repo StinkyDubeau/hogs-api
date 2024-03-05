@@ -64,7 +64,10 @@ npm run dev
 
 ```
 Running on port 3001.
+Database connection established.
 ```
+
+*If you do not see `Database connection established`, check that you have correctly entered your `CONNECTION_STRING`, and that you've registered your server's IP address in the mongodb dashboard.*
 
 ## Installation for dummies
 
