@@ -17,7 +17,6 @@ This endpoint will be used by hogs-front to show recently achieved scores, etc.
 - in: friendly_name
 - out: user_id
 
-
 ### UPDATE FRIENDLYNAME
 
 - in: user_id, 

@@ -1,10 +1,14 @@
-import * as dotenv from 'dotenv';
+import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { MongoClient, ServerApiVersion } from "mongodb";
-import { fakeScores, fakeScore, fakeLeaderboardRequest } from './helpers/fakeData.js';
+import {
+  fakeScores,
+  fakeScore,
+  fakeLeaderboardRequest,
+} from "./helpers/fakeData.js";
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -15,8 +19,8 @@ const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
-    deprecationErrors: true
-  }
+    deprecationErrors: true,
+  },
 });
 const db = client.db("hogs-api");
 
@@ -30,8 +34,18 @@ app.use(express.static("./public"));
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 app.use(authenticate);
+
+async function verifyDatabaseConnection() {
+  try {
+    
+  } catch {
+
+  }
+  console.log("Database connection established.");
+  return true;
+}
 
 async function authenticate(req, res, next) {
   req.key = req.header("API_KEY");
@@ -44,10 +58,13 @@ async function authenticate(req, res, next) {
     // User authenticated
     next();
   } else {
-    console.log(`AUTHENTICATION: User denied access. User tried to use key "${req.key}".`)
+    console.log(
+      `AUTHENTICATION: User denied access. User tried to use key "${req.key}".`
+    );
     res.status(401).send({
-      "message": "Access denied. Check that API_KEY is in header and is up to date."
-    })
+      message:
+        "Access denied. Check that API_KEY is in header and is up to date.",
+    });
   }
 }
 
@@ -58,7 +75,7 @@ async function readMany(query, options, collectionString, howManyRows) {
   try {
     await client.connect();
 
-    if (await target.countDocuments(query) === 0) {
+    if ((await target.countDocuments(query)) === 0) {
       console.log(`WARN: No results matched your query`);
     }
 
@@ -70,9 +87,8 @@ async function readMany(query, options, collectionString, howManyRows) {
       }
       responses.push(doc);
     }
-
   } catch {
-    console.log(`ERR: Could not read (many) from "${collectionString}".`)
+    console.log(`ERR: Could not read (many) from "${collectionString}".`);
   } finally {
     await client.close();
     return responses;
@@ -87,7 +103,7 @@ async function createOne(jsonData, collectionString) {
     await client.connect();
     response = await target.insertOne(jsonData);
   } catch {
-    console.log(`ERR: Could not create in collection "${collectionString}".`)
+    console.log(`ERR: Could not create in collection "${collectionString}".`);
   } finally {
     await client.close();
     return response;
@@ -103,9 +119,9 @@ async function postFakeScores() {
 // GET TEST JSON (No authentication, used for testing front-end)
 app.get("/test", (req, res) => {
   res.status(200).send({
-    "status": 200,
-    "message": "test success",
-    "time": new Date().getMinutes()
+    status: 200,
+    message: "test success",
+    time: new Date().getMinutes(),
   });
 });
 
@@ -122,7 +138,7 @@ app.get("/admin", (req, res) => {
 });
 
 // GET LEADERBOARD
-app.get("/api/scores", async (req, res) => {
+app.post("/api/scores", async (req, res) => {
   console.log("ENDPOINT: Getting a leaderboard.");
 
   let response = [];
@@ -130,9 +146,9 @@ app.get("/api/scores", async (req, res) => {
   try {
     const options = {
       sort: { points: 0 },
-      projection: { // What columns
-
-      }
+      projection: {
+        // What columns
+      },
     };
 
     // Insert narrowers into query
@@ -140,16 +156,18 @@ app.get("/api/scores", async (req, res) => {
       user_id: req.body.user_id,
       level: req.body.level,
       game_mode: req.body.game_mode,
-      game_version: req.body.game_version
+      game_version: req.body.game_version,
     });
 
     response = await readMany(query, options, "scores", req.body.rows);
     console.log(response.length);
 
-    res.status(200).send(response)
+    res.status(200).send(response);
   } catch {
     console.log("ERR: Failed to load leaderboard");
-    res.status(500).send({ "status": "500", "message": "ERR: Failed to load leaderboard" })
+    res
+      .status(500)
+      .send({ status: "500", message: "ERR: Failed to load leaderboard" });
   }
 });
 
@@ -157,9 +175,9 @@ app.get("/api/scores", async (req, res) => {
 app.post("/api/user", async (req, res) => {
   console.log("ENDPOINT: Posting a user.");
   res.status(500).send({
-    "status": "500",
-    "message": "Not implemented yet."
-  })
+    status: "500",
+    message: "Not implemented yet.",
+  });
 });
 
 // POST SCORE
@@ -171,16 +189,16 @@ app.post("/api/score", async (req, res) => {
     response = await createOne(fakeScore, "scores");
 
     res.status(200).send({
-      "status": "200",
-      "_id": response.insertedId,
-      "message": "Submitted a new score."
-    })
+      status: "200",
+      _id: response.insertedId,
+      message: "Submitted a new score.",
+    });
   } catch {
     console.log("There was an error posting a score.");
     res.status(500).send({
-      "status": "500",
-      "message": "There was an error posting a score."
-    })
+      status: "500",
+      message: "There was an error posting a score.",
+    });
   }
 });
 
