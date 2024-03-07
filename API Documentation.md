@@ -17,7 +17,62 @@ WHO_AM_I=web
 API_KEY=d45e6-25er8-e7833-d9877-arm44
 ```
 
-* API keys may be rolling in the future.
+**API keys may be rolling in the future.*
+
+## Create a news post with `post("/api/news")`.
+
+Usage: Upload a new post to the database. Send a title, author, body and (optionally) an abstract. A date one will be automatically assigned when the post is uploaded.
+
+The abstract is _not_ a subtitle, but a short summary of the article that will be shown when browsing the newsfeed.
+
+### Example request
+
+```json
+{
+    "title": "February 2024 Development Summary",
+    "author": "John Blogpostwriter",
+    "abstract": "A month of backend work.",
+    "body": "Lorum ipsum dolor[...]"
+}
+```
+
+### Example response
+
+```json
+{
+    "status": "200",
+    "message": "Uploaded new post successfully",
+    "_id": "id_of_new_news_post"
+}
+```
+
+## Get all news posts with `get("/api/news")`.
+
+Usage: Pull all available news posts from the database. Returns an array of news objects in json.
+
+No body is required for the request, however a header containing `API_KEY` is still necessary.
+
+### Example response
+
+```json
+[
+    {
+        "title": "February 2024 Development Summary",
+        "author": "John Blogpostwriter",
+        "abstract": "A month of backend work.",
+        "date": "Thu Mar 07 2024 13:59:48 GMT-0500 (Eastern Standard Time)",
+        "body": "Lorum ipsum dolor[...]"
+    },
+    {
+        "title": "March 2024 Development Summary",
+        "author": "John Blogpostwriter",
+        "abstract": "A month of frontend work.",
+        "date": "Wed Apr 06 2024 12:45:43 GMT-0500 (Eastern Standard Time)",
+        "body": "Lorum ipsum dolor[...]"
+    },
+...
+]
+```
 
 ## Load a leaderboard with `get("/api/scores")`.
 Usage: Download an array of scores filtered per your request. The resulting array will be in descending order sorted by points unless otherwise specified with key `sort_by`.
