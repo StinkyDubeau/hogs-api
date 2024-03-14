@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import {
+  fakePost,
   fakeScores,
   fakeScore,
   fakeLeaderboardRequest,
@@ -39,10 +40,7 @@ app.use(authenticate);
 
 async function verifyDatabaseConnection() {
   try {
-    
-  } catch {
-
-  }
+  } catch {}
   console.log("Database connection established.");
   return true;
 }
@@ -171,6 +169,38 @@ app.post("/api/scores", async (req, res) => {
   }
 });
 
+// GET NEWS
+app.post("/news/all", async (req, res) => {
+  console.log("ENDPOINT: Getting all news posts.");
+
+  let response = [];
+
+  try {
+    const options = {
+      sort: { points: 0 },
+      projection: {
+        // What columns
+      },
+    };
+
+    // Insert narrowers into query
+    const query = removeEmpty({
+      author: req.body.author,
+      title: req.body.title,
+    });
+
+    response = await readMany(query, options, "news", req.body.rows);
+    console.log(response.length);
+
+    res.status(200).send(response);
+  } catch {
+    console.log("ERR: Failed to load news posts.");
+    res
+      .status(500)
+      .send({ status: "500", message: "ERR: Failed to load news posts." });
+  }
+});
+
 // POST USER
 app.post("/api/user", async (req, res) => {
   console.log("ENDPOINT: Posting a user.");
@@ -178,6 +208,28 @@ app.post("/api/user", async (req, res) => {
     status: "500",
     message: "Not implemented yet.",
   });
+});
+
+// POST NEWS POST
+app.post("/news/create", async (req, res) => {
+  console.log("ENDPOINT: Posting a new post.");
+
+  let response;
+  try {
+    response = await createOne(fakePost, "news");
+
+    res.status(200).send({
+      status: "200",
+      _id: response.insertedId,
+      message: "Submitted a new post.",
+    });
+  } catch {
+    console.log("There was an error creating a news post.");
+    res.status(500).send({
+      status: "500",
+      message: "There was an error creating a news post.",
+    });
+  }
 });
 
 // POST SCORE
