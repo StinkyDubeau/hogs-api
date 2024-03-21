@@ -19,9 +19,9 @@ API_KEY=d45e6-25er8-e7833-d9877-arm44
 
 **API keys may be rolling in the future.*
 
-## Create a news post with `post("/api/news")`.
+## Create a news post with `post("/news/create")`.
 
-Usage: Upload a new post to the database. Send a title, author, body and (optionally) an abstract. A date one will be automatically assigned when the post is uploaded.
+Usage: Upload a new post to the database. Send a title, author, body and (optionally) an abstract. A date will be automatically assigned when the post is uploaded.
 
 The abstract is _not_ a subtitle, but a short summary of the article that will be shown when browsing the newsfeed.
 
@@ -46,7 +46,7 @@ The abstract is _not_ a subtitle, but a short summary of the article that will b
 }
 ```
 
-## Get all news posts with `get("/api/news")`.
+## Get all news posts with `post("/news/all")`.
 
 Usage: Pull all available news posts from the database. Returns an array of news objects in json.
 
@@ -75,7 +75,7 @@ No body is required for the request, however a header containing `API_KEY` is st
 ```
 
 ## Load a leaderboard with `get("/api/scores")`.
-Usage: Download an array of scores filtered per your request. The resulting array will be in descending order sorted by points unless otherwise specified with key `sort_by`.
+Usage: Download an array of scores filtered per your request. The resulting array will be in descending order sorted by points unless otherwise specified with key `sort_by`. Specify `rows: x` in the body of your request to limit the number of responses you get from the server. By default you will be limited to 100, but you can override this by specifying a higher number in your body.
 
 ### Narrowers:
 

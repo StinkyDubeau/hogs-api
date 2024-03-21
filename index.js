@@ -67,6 +67,11 @@ async function authenticate(req, res, next) {
 }
 
 async function readMany(query, options, collectionString, howManyRows) {
+
+  if(!howManyRows){
+    howManyRows = 100;
+  }
+
   let responses = [];
   const target = db.collection(collectionString);
 
@@ -210,13 +215,20 @@ app.post("/api/user", async (req, res) => {
   });
 });
 
-// POST NEWS POST
+// CREATE NEWS POST
 app.post("/news/create", async (req, res) => {
   console.log("ENDPOINT: Posting a new post.");
 
+  let post = {
+    title: req.body.title,
+    author: req.body.author,
+    abstract: req.body.abstract,
+    body: req.body.body,
+  };
+
   let response;
   try {
-    response = await createOne(fakePost, "news");
+    response = await createOne(post, "news");
 
     res.status(200).send({
       status: "200",
