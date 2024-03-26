@@ -130,7 +130,7 @@ app.get("/test", (req, res) => {
 
 // GET HOMEPAGE
 app.get("/", (req, res) => {
-  console.log("ENDPOINT: Getting homepage.");
+  console.log("ENDPOINT: Serving homepage.");
   res.render("index.ejs");
 });
 
