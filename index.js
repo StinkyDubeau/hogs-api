@@ -134,6 +134,11 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+app.get("/health", (req, res) => {
+  console.log("ENDPOINT: Healthcheck");
+  res.status(200);
+});
+
 // GET ADMIN PAGE
 app.get("/admin", (req, res) => {
   console.log("ENDPOINT: Getting admin page.");
