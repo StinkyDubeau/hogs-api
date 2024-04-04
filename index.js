@@ -134,9 +134,13 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+// GET HEALTH CHECK
 app.get("/health", (req, res) => {
-  console.log("ENDPOINT: Healthcheck");
-  res.status(200);
+  console.log(`ENDPOINT: healthcheck. ${new Date().toLocaleTimeString()}`);
+  res.status(200).send({
+    status: 200,
+    message: "Healthy",
+  });
 });
 
 // GET ADMIN PAGE
