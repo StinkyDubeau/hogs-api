@@ -67,8 +67,7 @@ async function authenticate(req, res, next) {
 }
 
 async function readMany(query, options, collectionString, howManyRows) {
-
-  if(!howManyRows){
+  if (!howManyRows) {
     howManyRows = 100;
   }
 
@@ -136,8 +135,10 @@ app.get("/", (req, res) => {
 
 // GET HEALTH CHECK
 app.get("/health", (req, res) => {
-  console.log(`ENDPOINT: Healthcheck @ local time ${new Date().toLocaleTimeString()}`);
-  res.render("index.ejs")
+  console.log(
+    `ENDPOINT: Healthcheck @ local time ${new Date().toLocaleTimeString()}`
+  );
+  res.render("index.ejs");
 });
 
 // GET ADMIN PAGE
@@ -254,9 +255,10 @@ app.post("/news/create", async (req, res) => {
 app.post("/api/score", async (req, res) => {
   console.log("ENDPOINT: Posting a score.");
 
+  // TODO: Sanitize score before blindly storing
   let response;
   try {
-    response = await createOne(fakeScore, "scores");
+    response = await createOne(req.body, "scores");
 
     res.status(200).send({
       status: "200",
