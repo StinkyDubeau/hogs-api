@@ -118,6 +118,11 @@ async function postFakeScores() {
   }
 }
 
+async function getCurrentDateTime() {
+  const d = new Date();
+  return(`${d.toLocaleDateString}, ${d.toLocaleTimeString}`)
+}
+
 // GET TEST JSON (No authentication, used for testing front-end)
 app.get("/test", (req, res) => {
   res.status(200).send({
@@ -226,8 +231,12 @@ app.post("/api/user", async (req, res) => {
 app.post("/news/create", async (req, res) => {
   console.log("ENDPOINT: Posting a new post.");
 
+
+  const now = req.body.date ? req.body.date : new Date().toLocaleString();
+
   let post = {
     title: req.body.title,
+    date: now,
     author: req.body.author,
     abstract: req.body.abstract,
     body: req.body.body,

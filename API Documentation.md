@@ -21,7 +21,7 @@ API_KEY=d45e6-25er8-e7833-d9877-arm44
 
 ## Create a news post with `post("/news/create")`.
 
-Usage: Upload a new post to the database. Send a title, author, body and (optionally) an abstract. A date will be automatically assigned when the post is uploaded.
+Usage: Upload a new post to the database. Send a title, author, body and (optionally) an abstract. Unless you provide a `date` key, a date will be automatically assigned when the post is uploaded. The automatically generated dates will not match your local time, but rather will be the current server time (UTC). Dates are simple locale strings, so you can write anything you want in them.
 
 The abstract is _not_ a subtitle, but a short summary of the article that will be shown when browsing the newsfeed.
 
