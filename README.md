@@ -93,6 +93,7 @@ AWS provides many ways of connecting to your instance. Do whatever sounds easies
 
 Start by checking for updates. (There will be lots)
 ```bash
+sudo apt update
 sudo apt upgrade
 ```
 
