@@ -12,7 +12,7 @@ Go checkout `./API Documentation.md`.
 
 Prerequisites:
 - Nodejs (v16 or higher)
-- An open port (of your choice, but our interal applications will prefer port 3001).
+- An open port (of your choice, but our internal applications will prefer port 3001).
 
 1. Navigate to a desired directory and clone:
 
