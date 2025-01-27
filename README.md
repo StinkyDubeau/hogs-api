@@ -170,7 +170,3 @@ npm run dev
 ```
 
 If you're not greeted with `Running on port 3001`, something has gone wrong. 
-
-### 6. (To be continued)
-
-Link to hogs-front or hogs-exe.
